@@ -1,10 +1,12 @@
 import logging
 import sys
+from datetime import datetime
 
 import flask
-import wtforms
 
 import israel
+import stations
+import ims
 
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
@@ -17,17 +19,29 @@ DEFAULT_LOCATION = 'Afula Nir Haemeq'
 
 @app.route('/', methods=['GET'])
 def index():
-    location = flask.request.args.get('location', DEFAULT_LOCATION)
+    station_name = flask.request.args.get('location', DEFAULT_LOCATION)
+
+    station = stations.get(station_name)
+
     locations = [
-        {'name': loc, 'selected': loc == location}
-        for loc in israel.STATIONS.keys()
+        {'name': loc, 'selected': loc == station_name}
+        for loc in stations.all()
     ]
-    return flask.render_template('index.html', location=location, locations=locations)
+
+    return flask.render_template(
+        'index.html',
+        date=datetime.now().strftime('%Y-%m-%d 00:00'),
+        temp_max=ims.temp_max(station),
+        elevation=station['elevation'],
+        location=station_name,
+        locations=locations,
+    )
 
 
-@app.route('/sounding/<location>.png', methods=['GET'])
-def sounding(location):
-    return flask.send_file(israel.get(station_name=location), mimetype='image/png')
+@app.route('/sounding/<station_name>.png', methods=['GET'])
+def sounding(station_name):
+    station = stations.get(station_name)
+    return flask.send_file(israel.get(station=station), mimetype='image/png')
 
 
 SOUNDING_URL = 'https://rucsoundings.noaa.gov/gwt/soundings/get_soundings.cgi?airport={lat}%2C{long}&start=latest&n_hrs=1&data_source=GFS&fcst_len=shortest&hr_inc=1&protocol=https%3A'

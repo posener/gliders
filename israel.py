@@ -3,7 +3,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import io
 
-import yaml
 from beaker import cache
 import logging
 from datetime import datetime
@@ -18,20 +17,12 @@ import metpy.calc as mpcalc
 import ims
 
 
-
 CACHE = cache.CacheManager()
 URL = 'http://weather.uwyo.edu/cgi-bin/sounding?region=mideast&TYPE=TEXT%3ALIST&YEAR={date.year}&MONTH={date.month}&FROM={date.day}{hour}&TO={date.day}{hour}&STNM=40179'
 FILE_NAME = '/tmp/sounding-{date.year}-{date.month}-{date.day}-{hour}.png'
 
-STATIONS = yaml.load(open('stations.yaml'))
 
-
-def get(station_name='Megido'):
-    try:
-        station = STATIONS[station_name]
-    except KeyError:
-        raise exceptions.NotFound('Station not found: {}'.format(station))
-
+def get(station):
     buf = _get(station)
     copy = io.BytesIO()
     copy.write(buf)
@@ -48,9 +39,9 @@ def _get(station):
     uwyo_table = _uwyo_data()
 
     logging.info('Collecting temperatures')
-    temp_max = _temp_max(station['id'])
+    temp = ims.temp_max(station)
 
-    plt = plot(uwyo_table, temp_max, station['elevation'])
+    plt = plot(uwyo_table, temp, station['elevation'])
 
     buf = io.BytesIO()
     plt.savefig(buf, format='png')
@@ -105,6 +96,7 @@ def plot(uwyo_data, temp_max, ground):
     # skew.plot_dry_adiabats()
     # skew.plot_moist_adiabats()
     # skew.plot_mixing_lines()
+    fig.tight_layout()
     return fig
 
 
@@ -159,15 +151,4 @@ class Data:
         self.Td = Td
         self.wind_u = None
         self.wind_v = None
-
-
-def _temp_max(station_id):
-    return _weather(station_id)['TDmax']['value']
-
-
-@CACHE.cache('weather', expire=60*60*1)
-def _weather(station_id):
-    data = ims.session.get('https://api.ims.gov.il/v1/envista/stations/{}/data/latest'.format(station_id)).json()
-    return {item['name']: item for item in data['data'][0]['channels']}
-
 
