@@ -12,13 +12,12 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 app = flask.Flask(__name__)
 
 
-class ChooseSounding(wtforms.Form):
-    name = wtforms.SelectField(label='Location', choices=israel.STATIONS.keys())
+DEFAULT_LOCATION = 'Afula Nir Haemeq'
 
 
 @app.route('/', methods=['GET'])
 def index():
-    location = flask.request.args.get('location', 'Megido')
+    location = flask.request.args.get('location', DEFAULT_LOCATION)
     locations = [
         {'name': loc, 'selected': loc == location}
         for loc in israel.STATIONS.keys()
