@@ -14,7 +14,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 app = flask.Flask(__name__)
 
 
-DEFAULT_LOCATION = 'Afula Nir Haemeq'
+DEFAULT_LOCATION = 'Megido'
 
 
 @app.route('/', methods=['GET'])
@@ -30,9 +30,6 @@ def index():
 
     return flask.render_template(
         'index.html',
-        date=datetime.now().strftime('%Y-%m-%d 00:00'),
-        temp_max=ims.temp_max(station),
-        elevation=station['elevation'],
         location=station_name,
         locations=locations,
     )

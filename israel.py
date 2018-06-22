@@ -13,6 +13,7 @@ import pandas as pd
 import bs4
 from metpy.units import units
 import metpy.calc as mpcalc
+import numpy as np
 
 import ims
 
@@ -21,6 +22,10 @@ CACHE = cache.CacheManager()
 URL = 'http://weather.uwyo.edu/cgi-bin/sounding?region=mideast&TYPE=TEXT%3ALIST&YEAR={date.year}&MONTH={date.month}&FROM={date.day}{hour}&TO={date.day}{hour}&STNM=40179'
 FILE_NAME = '/tmp/sounding-{date.year}-{date.month}-{date.day}-{hour}.png'
 
+import matplotlib.image as image
+
+plane_hot = image.imread('plane-hot.png')
+plane_cold = image.imread('plane-cold.png')
 
 def get(station):
     buf = _get(station)
@@ -49,54 +54,56 @@ def _get(station):
     return buf.read()
 
 
-X_LIM = -20, 40
+T_LIM = -20, 40
+H_LIM = 0, 15000
 
 
-def plot(uwyo_data, temp_max, ground):
+M = -3. / 1000
+H_TRIGGER = 4000.
+
+
+def plot(data, t0, h0):
+
+    h = np.array([hi.to('feet').m for hi in data.h if hi.to('feet').m <= H_LIM[1]])
+    T = np.array([ti.to('degC').m for ti in data.T[:len(h)]])
+    Td = np.array([ti.to('degC').m for ti in data.Td[:len(h)]])
+
     fig = plt.figure(figsize=(6, 10))
     ax = fig.add_subplot(111)
     ax.grid(True)
-    ax.set_ylim(0, 15000)
-    ax.set_xlim(X_LIM)
+    ax.set_ylim(*H_LIM)
+    ax.set_xlim(*T_LIM)
 
     # Plot the data using normal plotting functions, in this case using
     # log scaling in Y, as dictated by the typical meteorological plot
-    ax.plot(uwyo_data.T, uwyo_data.h, 'r')
-    ax.plot(uwyo_data.Td, uwyo_data.h, 'g')
+    ax.plot(T, h, 'r', label='Temp [C]')
+    ax.plot(Td, h, 'b', label='Dew Point [C]')
+
+    t_max = [
+        t0 + M * (hi - h0)
+        for hi in h
+    ]
 
     # plot temp max
-    ax.plot(
-        [temp_max, temp_max-10*15],
-        [ground, ground+10*5000],
-        'k--o'
-    )
+    ax.plot(t_max, h, 'g--', label='Tmax DALR {:.1f} C'.format(t0))
 
     # plot ground
-    ax.plot(X_LIM, [ground, ground], 'brown')
+    ax.plot(T_LIM, [h0, h0], 'brown')
 
-    # skew.plot_barbs(uwyo_data.p, uwyo_data.wind_u, uwyo_data.wind_v)
-    #
-    # # Calculate LCL height and plot as black dot
-    # lcl_pressure, lcl_temperature = mpcalc.lcl(uwyo_data.p[0], uwyo_data.T[0], uwyo_data.Td[0])
-    # ax.plot(lcl_pressure, lcl_temperature, 'ko', markerfacecolor='black')
-    #
-    # # Calculate full parcel profile and add to plot as black line
-    # prof = mpcalc.parcel_profile(uwyo_data.p, uwyo_data.T[0], uwyo_data.Td[0]).to('degC')
-    # skew.plot(uwyo_data.p, prof, 'k', linewidth=2)
-    #
-    # # Shade areas of CAPE and CIN
-    # skew.shade_cin(uwyo_data.p, uwyo_data.T, prof)
-    # skew.shade_cape(uwyo_data.p, uwyo_data.T, prof)
-    #
-    # # An example of a slanted line at constant T -- in this case the 0
-    # # isotherm
-    # skew.ax.axvline(0, color='c', linestyle='--', linewidth=2)
-    #
-    # # Add the relevant special lines
-    # skew.plot_dry_adiabats()
-    # skew.plot_moist_adiabats()
-    # skew.plot_mixing_lines()
+    # calculate trigger temperature
+    t_trigger = np.interp(H_TRIGGER, h, T)
+    t0_trigger = t_trigger + M * (h0 - H_TRIGGER)
+    ax.plot([t_trigger, t0_trigger], [H_TRIGGER, h0], 'r--', label='Trigger {:.1f} C'.format(t0_trigger))
+
+    # calculate TOL and T-3
+    TOL = np.interp(0, np.flip(t_max-T, 0), np.flip(h, 0))
+    ax.plot([T_LIM[-1]-3], [TOL], "ro", label='TOL {:.0f} ft'.format(TOL), marker=r'^')
+
+    Tminus3 = np.interp(0, np.flip(t_max-T-3, 0), np.flip(h, 0))
+    ax.plot([T_LIM[-1]-3], [Tminus3], 'yo', label='T-3 {:.0f} ft'.format(Tminus3), marker=r'^')
+
     fig.tight_layout()
+    fig.legend()
     return fig
 
 

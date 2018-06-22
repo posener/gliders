@@ -26,15 +26,8 @@
 
 <div class="container">
      <div class="row">
-         <div class="col-12 col-lg-5">
-             <ul class="list-group">
-                 <li class="list-group-item active">Time: {{date}}</li>
-                 <li class="list-group-item">Ground Elevation: {{ "%.0f"|format(elevation) }} m</li>
-                 <li class="list-group-item">Max Temp: {{ "%.1f"|format(temp_max) }} C</li>
-             </ul>
-         </div>
-         <div class="col-12 col-lg-7">
-             <img src="/sounding/{{location}}.png" width="100%" class="img-fluid mx-auto d-block" alt="Not Found">
+         <div class="col-12">
+             <img src="/sounding/{{location}}.png" class="img-fluid mx-auto d-block" alt="Not Found">
          </div>
      </div>
 </div>
