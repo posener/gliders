@@ -85,7 +85,7 @@ def plot(data, t0, h0):
     ]
 
     # plot temp max
-    ax.plot(t_max, h, 'g--', label='Tmax DALR {:.1f} C'.format(t0))
+    ax.plot(t_max, h, 'g', label='Tmax DALR {:.1f} C'.format(t0))
 
     # plot ground
     ax.plot(T_LIM, [h0, h0], 'brown')
@@ -93,7 +93,7 @@ def plot(data, t0, h0):
     # calculate trigger temperature
     t_trigger = np.interp(H_TRIGGER, h, T)
     t0_trigger = t_trigger + M * (h0 - H_TRIGGER)
-    ax.plot([t_trigger, t0_trigger], [H_TRIGGER, h0], 'r--', label='Trigger {:.1f} C'.format(t0_trigger))
+    ax.plot([t_trigger, t0_trigger], [H_TRIGGER, h0], 'g--', label='Trigger {:.1f} C'.format(t0_trigger))
 
     # calculate TOL and T-3
     TOL = np.interp(0, np.flip(t_max-T, 0), np.flip(h, 0))
