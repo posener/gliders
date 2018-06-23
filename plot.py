@@ -5,7 +5,6 @@ import io
 
 from beaker import cache
 import logging
-import numpy as np
 
 import ims
 import uwyo
@@ -15,10 +14,8 @@ import calc
 CACHE = cache.CacheManager()
 FILE_NAME = '/tmp/sounding-{date.year}-{date.month}-{date.day}-{hour}.png'
 
-import matplotlib.image as image
 
-plane_hot = image.imread('plane-hot.png')
-plane_cold = image.imread('plane-cold.png')
+matplotlib.rc('font', family='normal', size=16)
 
 
 def plot(station):
@@ -48,6 +45,8 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     ax.grid(True)
     ax.set_ylim(*lim_h)
     ax.set_xlim(*lim_t)
+    ax.set_xlabel('Temp [C]')
+    ax.set_ylabel('Elevation [f]')
 
     # Plot the data using normal plotting functions, in this case using
     # log scaling in Y, as dictated by the typical meteorological plot
@@ -64,9 +63,9 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     ax.plot(trig, height, 'g--', label='Trigger {:.1f} C'.format(trig_0))
 
     # calculate TOL and T-3
-    ax.plot([lim_t[-1] - 3], [tol], "ro", label='TOL {:.0f} ft'.format(tol), marker=r'^')
+    ax.plot([lim_t[-1] - 3], [tol], "ro", label='TOL {:.0f} ft'.format(tol), marker=r'^', markersize=16)
 
-    ax.plot([lim_t[-1] - 3], [tol_minus_3], 'yo', label='T-3 {:.0f} ft'.format(tol_minus_3), marker=r'^')
+    ax.plot([lim_t[-1] - 3], [tol_minus_3], 'yo', label='T-3 {:.0f} ft'.format(tol_minus_3), marker=r'^', markersize=16)
 
     fig.tight_layout()
     fig.legend()
