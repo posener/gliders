@@ -8,33 +8,42 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">{{location}} from {{data_time}}</a>
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        GoTo
-      </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          {% for loc in locations %}
-          {% if not loc.selected %}
-          <a class="dropdown-item" href="/?location={{loc.name}}">{{loc.name}}</a>
-          {% endif %}
-          {% endfor %}
-      </div>
-    </li>
-  </ul>
+    <a class="navbar-brand" href="#">{{location}} from {{data_time}}</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                GoTo
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for loc in locations %}
+                {% if not loc.selected %}
+                <a class="dropdown-item" href="/locations/{{loc.name}}">{{loc.name}}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </li>
+    </ul>
 </nav>
 
-
-
-
-
 <div class="container">
-     <div class="row">
-         <div class="col-12">
-             <img src="/sounding/{{location}}-{{hour}}.png" class="img-fluid mx-auto d-block" alt="Not Found">
-         </div>
-     </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="list-group">
+                {% for loc in locations %}
+                <a href="/locations/{{loc.name}}" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{loc.name}}</h5>
+                        <small><span class="badge badge-success">{% if loc.data.trig_0 >= loc.data.t0 %}Triggered{% endif %}</span></small>
+                    </div>
+                    <span class="badge badge-primary">TOL: {{'%.0f' | format(loc.data.tol)}} f</span>
+                    <span class="badge badge-info">TOL-3: {{'%.0f' | format(loc.data.tol_minus_3)}} f</span>
+                    <span class="badge badge-warning">Trigger: {{'%.0f' | format(loc.data.trig_0)}} C</span>
+                    <span class="badge badge-danger">Max Temp: {{loc.data.t0}} C</span>
+                </a>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

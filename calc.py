@@ -16,6 +16,7 @@ def calculate(data, t0, h0):
     height = np.array([hi.to('feet').m for hi in data.h if hi.to('feet').m <= _LIM_H[1]])
     temp = np.array([ti.to('degC').m for ti in data.T[:len(height)]])
     dew = np.array([ti.to('degC').m for ti in data.Td[:len(height)]])
+
     temp_max = [t0 + M * (hi - h0) for hi in height]
 
     trig_h = np.interp(H_TRIGGER, height, temp)

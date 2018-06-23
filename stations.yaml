@@ -35,13 +35,13 @@ Katzerin:
   coord: {lat: 32.990998, long: 35.689865000000054}
   elevation: 1023.62
   temp_max_id: 201
-Tel Aviv Coast:
+Tel Aviv:
   coord: {lat: 32.059, long: 34.759}
   elevation: 0
   station_id: 178
   temp_max_id: 402
-Elat:
+Eilat:
   coord: {lat: 29.553, long: 34.954}
-  elevation: 0,
+  elevation: 0
   station_id: 64
   temp_max_id: 520

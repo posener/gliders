@@ -21,28 +21,47 @@ DEFAULT_LOCATION = 'Megido'
 
 @app.route('/', methods=['GET'])
 def index():
-    station_name = flask.request.args.get('location', DEFAULT_LOCATION)
+    uwyo_table, data_time = uwyo.data()
 
-    _, data_time = uwyo.data()
-
-    locations = [
-        {'name': loc, 'selected': loc == station_name}
-        for loc in stations.all()
-    ]
+    locations = []
+    for loc in stations.all():
+        station = stations.get(loc)
+        locations.append({
+            'name': loc,
+            'selected': False,
+            'data': calc.calculate(uwyo_table, ims.temp_max(station), station['elevation'])
+        })
 
     return flask.render_template(
         'index.html',
-        location=station_name,
+        location=None,
         hour=datetime.now().hour,
         locations=locations,
         data_time=data_time,
     )
 
 
-@app.route('/sounding/<station_name>.png', methods=['GET'])
-def sounding(station_name):
-    station_name = station_name.split('-')[0]
-    station = stations.get(station_name)
+@app.route('/locations/<location_name>', methods=['GET'])
+def site(location_name):
+    _, data_time = uwyo.data()
+    locations = [
+        {'name': loc, 'selected': loc == location_name}
+        for loc in stations.all()
+    ]
+
+    return flask.render_template(
+        'location.html',
+        location=location_name,
+        hour=datetime.now().hour,
+        locations=locations,
+        data_time=data_time,
+    )
+
+
+@app.route('/sounding/<location_name>.png', methods=['GET'])
+def sounding(location_name):
+    location_name = location_name.split('-')[0]
+    station = stations.get(location_name)
     uwyo_table, time = uwyo.data()
     temp = ims.temp_max(station)
     data = calc.calculate(uwyo_table, temp, station['elevation'])
