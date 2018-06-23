@@ -31,7 +31,7 @@ def plot(station):
 
 @CACHE.cache('plot', expire=60)
 def _cached(station):
-    logging.info('Calculating plot for %s', station['station_id'])
+    logging.info('Calculating plot for %s', station)
     uwyo_table, time = uwyo.data()
     temp = ims.temp_max(station)
     data = calc.calculate(uwyo_table, temp, station['elevation'])
