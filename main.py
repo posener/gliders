@@ -4,6 +4,9 @@ from datetime import datetime
 
 import flask
 
+import ims
+import uwyo
+import calc
 import plot
 import stations
 
@@ -20,7 +23,7 @@ DEFAULT_LOCATION = 'Megido'
 def index():
     station_name = flask.request.args.get('location', DEFAULT_LOCATION)
 
-    station = stations.get(station_name)
+    _, data_time = uwyo.data()
 
     locations = [
         {'name': loc, 'selected': loc == station_name}
@@ -32,6 +35,7 @@ def index():
         location=station_name,
         hour=datetime.now().hour,
         locations=locations,
+        data_time=data_time,
     )
 
 
@@ -39,7 +43,10 @@ def index():
 def sounding(station_name):
     station_name = station_name.split('-')[0]
     station = stations.get(station_name)
-    return flask.send_file(plot.plot(station=station), mimetype='image/png')
+    uwyo_table, time = uwyo.data()
+    temp = ims.temp_max(station)
+    data = calc.calculate(uwyo_table, temp, station['elevation'])
+    return flask.send_file(plot.plot(data), mimetype='image/png')
 
 
 SOUNDING_URL = 'https://rucsoundings.noaa.gov/gwt/soundings/get_soundings.cgi?airport={lat}%2C{long}&start=latest&n_hrs=1&data_source=GFS&fcst_len=shortest&hr_inc=1&protocol=https%3A'

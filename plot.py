@@ -9,10 +9,6 @@ import numpy as np
 from beaker import cache
 import logging
 
-import ims
-import uwyo
-import calc
-
 
 CACHE = cache.CacheManager()
 FILE_NAME = '/tmp/sounding-{date.year}-{date.month}-{date.day}-{hour}.png'
@@ -21,8 +17,8 @@ FILE_NAME = '/tmp/sounding-{date.year}-{date.month}-{date.day}-{hour}.png'
 matplotlib.rc('font', family='normal', size=16)
 
 
-def plot(station):
-    buf = _cached(station)
+def plot(data):
+    buf = _cached(data)
     copy = io.BytesIO()
     copy.write(buf)
     copy.seek(0)
@@ -30,11 +26,7 @@ def plot(station):
 
 
 @CACHE.cache('plot', expire=60)
-def _cached(station):
-    logging.info('Calculating plot for %s', station)
-    uwyo_table, time = uwyo.data()
-    temp = ims.temp_max(station)
-    data = calc.calculate(uwyo_table, temp, station['elevation'])
+def _cached(data):
     plt = _plot(**data)
     buf = io.BytesIO()
     plt.savefig(buf, format='png')

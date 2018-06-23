@@ -25,13 +25,13 @@ def data():
     url = _URL.format(date=now, hour='12')
     data = _uwyo_data_get(url)
     if data is not None:
-        return data, 'noon'
+        return data, '12PM'
 
     # if no noon measurements available, return the midnight measurements
     url = _URL.format(date=now, hour='00')
     data = _uwyo_data_get(url)
     if data is not None:
-        return data, 'midnight'
+        return data, '00AM'
 
     raise exceptions.NotFound('No sounding data available from today')
 
