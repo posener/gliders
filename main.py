@@ -4,9 +4,8 @@ from datetime import datetime
 
 import flask
 
-import israel
+import plot
 import stations
-import ims
 
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
@@ -31,14 +30,16 @@ def index():
     return flask.render_template(
         'index.html',
         location=station_name,
+        hour=datetime.now().hour,
         locations=locations,
     )
 
 
 @app.route('/sounding/<station_name>.png', methods=['GET'])
 def sounding(station_name):
+    station_name = station_name.split('-')[0]
     station = stations.get(station_name)
-    return flask.send_file(israel.get(station=station), mimetype='image/png')
+    return flask.send_file(plot.plot(station=station), mimetype='image/png')
 
 
 SOUNDING_URL = 'https://rucsoundings.noaa.gov/gwt/soundings/get_soundings.cgi?airport={lat}%2C{long}&start=latest&n_hrs=1&data_source=GFS&fcst_len=shortest&hr_inc=1&protocol=https%3A'

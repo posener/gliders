@@ -18,8 +18,9 @@ def temp_max(station):
     return _temp_max(station['temp_max_id'])
 
 
-@CACHE.cache('temp_max', expire=60*60*1)
+@CACHE.cache('temp_max', expire=60*60)
 def _temp_max(station_id):
+    logging.info('Collecting temperatures from IMS')
     resp = requests.post(
         'http://www.ims.gov.il/IMS/Pages/IsrCitiesTodayForeCast.aspx',
         data={
