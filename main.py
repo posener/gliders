@@ -31,6 +31,10 @@ def index():
             'selected': False,
             'data': calc.calculate(uwyo_table, ims.temp_max(station), station['elevation'])
         })
+    max_tol = float(max(loc['data']['tol'] for loc in locations))
+
+    for loc in locations:
+        loc['tol_percent'] = loc['data']['tol'] / max_tol * 100
 
     return flask.render_template(
         'index.html',
@@ -66,6 +70,19 @@ def sounding(location_name):
     temp = ims.temp_max(station)
     data = calc.calculate(uwyo_table, temp, station['elevation'])
     return flask.send_file(plot.plot(data), mimetype='image/png')
+
+
+@app.context_processor
+def level():
+    def level(percent):
+        if percent <= 25:
+            return 'danger'
+        if percent <= 50:
+            return 'warning'
+        if percent <= 75:
+            return 'info'
+        return 'success'
+    return {'level': level}
 
 
 SOUNDING_URL = 'https://rucsoundings.noaa.gov/gwt/soundings/get_soundings.cgi?airport={lat}%2C{long}&start=latest&n_hrs=1&data_source=GFS&fcst_len=shortest&hr_inc=1&protocol=https%3A'
