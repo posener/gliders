@@ -18,8 +18,9 @@ def calculate(data, t0, h0):
     dew = np.array([ti.to('degC').m for ti in data.Td[:len(height)]])
     temp_max = [t0 + M * (hi - h0) for hi in height]
 
-    trig_0 = np.interp(H_TRIGGER, height, temp)
-    trig = trig_0 + M * (height - H_TRIGGER)
+    trig_h = np.interp(H_TRIGGER, height, temp)
+    trig = trig_h + M * (height - H_TRIGGER)
+    trig_0 = trig_h + M * (h0 - H_TRIGGER)
 
     tol = np.interp(0, np.flip(temp_max-temp, 0), np.flip(height, 0))
 
