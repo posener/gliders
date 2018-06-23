@@ -5,7 +5,6 @@ from werkzeug import exceptions
 _KEYS = {
     'coord',
     'elevation',
-    'station_id',
     'temp_max_id',
 }
 

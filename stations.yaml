@@ -1,286 +1,47 @@
 Megido:
   coord: {lat: 32.597, long: 35.278}
-  elevation: 187.00788
+  elevation: 186
   station_id: 16
   temp_max_id: 209
-Elat:
-  coord: {lat: 29.553, long: 34.954}
-  elevation: 65.6168
-  station_id: 64
-  temp_max_id: 520
 Beer Sheva:
-  coord: {lat: 31.333, long: 34.783}
-  elevation: 895.66932
+  coord: {lat: 31.252973, long: 34.791462000000024}
+  elevation: 600
   station_id: 59
   temp_max_id: 402
 Haifa:
   coord: {lat: 32.799, long: 35.049}
-  elevation: 6.56168
+  elevation: 400
   station_id: 42
   temp_max_id: 115
+Zefat:
+  coord: {lat: 32.964648, long: 35.49599699999999}
+  elevation: 2568.9
+  station_id: 62
+  temp_station_id: 507
+Mizpe Ramon:
+  coord: {lat: 30.610203, long: 34.801898}
+  elevation: 2775.59
+  station_id:
+  temp_station_id: 106
+Tiberias:
+  coord: {lat: 32.795859, long: 35.53097300000002}
+  elevation: 334.646
+  temp_max_id: 114
+Bet Shaan:
+  coord: {lat: 32.497103, long: 35.49733600000002}
+  elevation: 410.105
+  temp_max_id: 203
+Katzerin:
+  coord: {lat: 32.990998, long: 35.689865000000054}
+  elevation: 1023.62
+  temp_max_id: 201
 Tel Aviv Coast:
   coord: {lat: 32.059, long: 34.759}
-  elevation: 22.96588
+  elevation: 0
   station_id: 178
   temp_max_id: 402
-
-Arad:
-  coord: {lat: 31.251, long: 35.186}
-  elevation: 1827.42788
-  station_id: 29
-Ayyelet Hashahar:
-  coord: {lat: 33.02, long: 35.57}
-  elevation: 652.88716
-  station_id: 353
-Beit Jimal:
-  coord: {lat: 31.716, long: 34.966}
-  elevation: 984.252
-  station_id: 75
-Besor Farm:
-  coord: {lat: 31.273, long: 34.389}
-  elevation: 344.4882
-  station_id: 58
-Bet Dagan:
-  coord: {lat: 32.009, long: 34.814}
-  elevation: 121.39108
-  station_id: 54
-Bet Haarava:
-  coord: {lat: 31.805, long: 35.501}
-  elevation: -1095.80056
-  station_id: 228
-Bet Zayda:
-  coord: {lat: 32.881, long: 35.653}
-  elevation: -649.60632
-  station_id: 6
-Dafna:
-  coord: {lat: 33.23, long: 35.6}
-  elevation: 498.68768
-  station_id: 348
-Deir Hanna:
-  coord: {lat: 32.863, long: 35.374}
-  elevation: 948.16276
-  station_id: 99
-Dorot:
-  coord: {lat: 31.5, long: 34.633}
-  elevation: 331.36484
-  station_id: 79
-Eden Farm:
-  coord: {lat: 32.47, long: 35.489}
-  elevation: -390.41996
-  station_id: 206
-Elon:
-  coord: {lat: 33.066, long: 35.217}
-  elevation: 994.09452
-  station_id: 73
-En Gedi:
-  coord: {lat: 31.419, long: 35.386}
-  elevation: -1348.42524
-  station_id: 211
-En Hahoresh:
-  coord: {lat: 32.388, long: 34.938}
-  elevation: 52.49344
-  station_id: 107
-En Hashofet:
-  coord: {lat: 32.633, long: 35.099}
-  elevation: 482.28348
-  station_id: 67
-En Karmel:
-  coord: {lat: 32.682, long: 34.96}
-  elevation: 72.17848
-  station_id: 44
-Eshhar:
-  coord: {lat: 32.883, long: 35.299}
-  elevation: 1059.71132
-  station_id: 205
-Ezuz:
-  coord: {lat: 30.791, long: 34.472}
-  elevation: 1072.83468
-  station_id: 338
-Gamla:
-  coord: {lat: 32.907, long: 35.748}
-  elevation: 1338.5827199999999
-  station_id: 227
-Gat:
-  coord: {lat: 31.616, long: 34.783}
-  elevation: 403.54332
-  station_id: 236
-Gilgal:
-  coord: {lat: 31.983, long: 35.45}
-  elevation: -728.34648
-  station_id: 30
-Hadera Port:
-  coord: {lat: 32.474, long: 34.883}
-  elevation: 3.28084
-  station_id: 46
-Hafez Hayyim:
-  coord: {lat: 31.793, long: 34.804}
-  elevation: 239.50132
-  station_id: 121
-Har Harasha:
-  coord: {lat: 31.933, long: 35.15}
-  elevation: 1581.36488
-  station_id: 24
-Harashim:
-  coord: {lat: 32.956, long: 35.328}
-  elevation: 2726.37804
-  station_id: 269
-Hazeva:
-  coord: {lat: 30.51, long: 35.14}
-  elevation: 196.8504
-  station_id: 33
-Itamar:
-  coord: {lat: 32.166, long: 35.349}
-  elevation: 2647.6378799999998
-  station_id: 90
-Jerusalem Centre:
-  coord: {lat: 31.781, long: 35.222}
-  elevation: 2621.39116
-  station_id: 23
-Jerusalem Givat Ram:
-  coord: {lat: 31.771, long: 35.197}
-  elevation: 2526.2468
-  station_id: 22
-Kefar Blum:
-  coord: {lat: 33.173, long: 35.613}
-  elevation: 259.18636
-  station_id: 202
-Kefar Giladi:
-  coord: {lat: 33.241, long: 35.57}
-  elevation: 1174.54072
-  station_id: 241
-Kefar Nahum:
-  coord: {lat: 32.883, long: 35.579}
-  elevation: -672.5722
-  station_id: 233
-Lahav:
-  coord: {lat: 31.3, long: 34.87}
-  elevation: 1161.41736
-  station_id: 350
-Lev Kineret:
-  coord: {lat: 32.816, long: 35.599}
-  elevation: -708.66144
-  station_id: 115
-Maale Adummim:
-  coord: {lat: 31.773, long: 35.296}
-  elevation: 1614.17328
-  station_id: 218
-Maale Gilboa:
-  coord: {lat: 32.481, long: 35.415}
-  elevation: 1610.89244
-  station_id: 224
-Massada:
-  coord: {lat: 32.67, long: 35.6}
-  elevation: -715.22312
-  station_id: 355
-Merom Golan Picman:
-  coord: {lat: 33.133, long: 35.783}
-  elevation: 3553.14972
-  station_id: 10
-Metzoke Dragot:
-  coord: {lat: 31.583, long: 35.383}
-  elevation: -213.2546
-  station_id: 210
-Mizpe Ramon:
-  coord: {lat: 30.6125, long: 34.7967}
-  elevation: 2788.714
-  station_id: 379
-Mizpe Ramon 20120927:
-  coord: {lat: 30.614, long: 34.797}
-  elevation: 2788.714
-  station_id: 265
-Nahshon:
-  coord: {lat: 31.834, long: 34.961}
-  elevation: 606.9553999999999
-  station_id: 259
-Negba:
-  coord: {lat: 31.658, long: 34.681}
-  elevation: 298.55644
-  station_id: 82
-Neot Smadar:
-  coord: {lat: 30.048, long: 35.023}
-  elevation: 1322.17852
-  station_id: 232
-Netiv Halamed He:
-  coord: {lat: 31.683, long: 34.983}
-  elevation: 938.32024
-  station_id: 25
-Nevatim:
-  coord: {lat: 31.205, long: 34.922}
-  elevation: 1141.73232
-  station_id: 349
-Newe Yaar:
-  coord: {lat: 32.709, long: 35.179}
-  elevation: 413.38584
-  station_id: 186
-Nizzan:
-  coord: {lat: 31.733, long: 34.635}
-  elevation: 88.58268
-  station_id: 274
-Paran:
-  coord: {lat: 30.367, long: 35.148}
-  elevation: 328.084
-  station_id: 207
-Paran 20060124:
-  coord: {lat: 40.45, long: 35.15}
-  elevation: 4215.8794
-  station_id: 35
-Qarne Shomeron:
-  coord: {lat: 32.166, long: 35.099}
-  elevation: 754.5932
-  station_id: 20
-Qevuzat Yavne:
-  coord: {lat: 31.816, long: 34.7}
-  elevation: 114.82939999999999
-  station_id: 74
-Rosh Haniqra:
-  coord: {lat: 33.081, long: 35.107}
-  elevation: 13.12336
-  station_id: 106
-Rosh Zurim:
-  coord: {lat: 31.665, long: 35.124}
-  elevation: 3100.3938
-  station_id: 77
-Sede Boqer:
-  coord: {lat: 30.871, long: 34.796}
-  elevation: 1564.96068
-  station_id: 98
-Sede Boqer Uni:
-  coord: {lat: 30.85, long: 34.7636}
-  elevation: 1712.5984799999999
-  station_id: 89
-Sede Eliyyahu:
-  coord: {lat: 32.44, long: 35.51}
-  elevation: -603.67456
-  station_id: 366
-Sedom:
-  coord: {lat: 31.032, long: 35.391}
-  elevation: -1276.24676
-  station_id: 65
-Shaare Tiqwa 20161205:
-  coord: {lat: 32.127, long: 35.026}
-  elevation: 656.168
-  station_id: 270
-Shani:
-  coord: {lat: 31.35, long: 35.049}
-  elevation: 2119.42264
-  station_id: 28
-Shave Ziyyon:
-  coord: {lat: 32.98, long: 35.09}
-  elevation: 16.4042
-  station_id: 343
-Tavor Kadoorie:
-  coord: {lat: 32.7, long: 35.4}
-  elevation: 403.54332
-  station_id: 13
-Yotvata:
-  coord: {lat: 29.886, long: 35.078}
-  elevation: 236.22048
-  station_id: 36
-Zefat Har Kenaan:
-  coord: {lat: 32.982, long: 35.507}
-  elevation: 2942.91348
-  station_id: 62
-Zikhron Yaaqov:
-  coord: {lat: 32.566, long: 34.95}
-  elevation: 469.16012
-  station_id: 45
+Elat:
+  coord: {lat: 29.553, long: 34.954}
+  elevation: 0,
+  station_id: 64
+  temp_max_id: 520
