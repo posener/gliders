@@ -46,7 +46,7 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     ax.set_ylim(*lim_h)
     ax.set_xlim(*lim_t)
     ax.set_xlabel('Temp [C]')
-    ax.set_ylabel('Elevation [f]')
+    ax.set_ylabel('Elevation [1000f]')
 
     # Plot the data using normal plotting functions, in this case using
     # log scaling in Y, as dictated by the typical meteorological plot
