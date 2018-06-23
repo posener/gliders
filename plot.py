@@ -2,7 +2,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib import ticker
+from matplotlib import transforms
 import io
+import numpy as np
 
 from beaker import cache
 import logging
@@ -40,7 +42,7 @@ def _cached(station):
     return buf.read()
 
 
-def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, lim_h, lim_t):
+def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, lim_h, lim_t, wind_u, wind_v):
     fig = plt.figure(figsize=(6, 10))
     ax = fig.add_subplot(111)
     ax.grid(True)
@@ -70,6 +72,24 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     ax.plot([lim_t[-1] - 3], [tol], "ro", label='TOL {:.0f} ft'.format(tol), marker=r'^', markersize=16)
 
     ax.plot([lim_t[-1] - 3], [tol_minus_3], 'yo', label='T-3 {:.0f} ft'.format(tol_minus_3), marker=r'^', markersize=16)
+
+    xloc = 0.1
+    x_clip_radius = 0.08
+    y_clip_radius = 0.08
+
+    x = np.empty_like(height)
+    x.fill(xloc)
+
+    # Do barbs plot at this location
+    b = ax.barbs(x, height, wind_u, wind_v,
+                      transform=ax.get_yaxis_transform(which='tick2'),
+                      clip_on=True)
+
+    # Override the default clip box, which is the axes rectangle, so we can have
+    # barbs that extend outside.
+    ax_bbox = transforms.Bbox([[xloc - x_clip_radius, -y_clip_radius],
+                               [xloc + x_clip_radius, 1.0 + y_clip_radius]])
+    b.set_clip_box(transforms.TransformedBbox(ax_bbox, ax.transAxes))
 
     fig.tight_layout()
     fig.legend()

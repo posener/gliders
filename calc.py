@@ -26,6 +26,9 @@ def calculate(data, t0, h0):
 
     tol_minus_3 = np.interp(0, np.flip(temp_max-temp-3, 0), np.flip(height, 0))
 
+    wind_u = np.array([ti.to('knot').m for ti in data.wind_u[:len(height)]])
+    wind_v = np.array([ti.to('knot').m for ti in data.wind_v[:len(height)]])
+
     return {
         'height': height,
         'temp': temp,
@@ -39,6 +42,8 @@ def calculate(data, t0, h0):
         'tol_minus_3': tol_minus_3,
         'lim_h': _LIM_H,
         'lim_t': _LIM_T,
+        'wind_u': wind_u,
+        'wind_v': wind_v,
     }
 
 
