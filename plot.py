@@ -1,6 +1,7 @@
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib import ticker
 import io
 
 from beaker import cache
@@ -48,6 +49,9 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     ax.set_xlabel('Temp [C]')
     ax.set_ylabel('Elevation [1000f]')
 
+    ax.yaxis.set_major_formatter(ticker.FuncFormatter(
+        lambda y, pos: '%.0f' % (y * 1e-3)))
+
     # Plot the data using normal plotting functions, in this case using
     # log scaling in Y, as dictated by the typical meteorological plot
     ax.plot(temp, height, 'r', label='Temp [C]')
@@ -57,7 +61,7 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     ax.plot(temp_max, height, 'g', label='Tmax DALR {:.1f} C'.format(t0))
 
     # plot ground
-    ax.plot(lim_t, [h0, h0], 'brown')
+    ax.plot(lim_t, [h0, h0], 'brown', label='Ground {:.0f}'.format(h0))
 
     # calculate trigger temperature
     ax.plot(trig, height, 'g--', label='Trigger {:.1f} C'.format(trig_0))
