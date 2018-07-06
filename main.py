@@ -21,7 +21,10 @@ DEFAULT_LOCATION = 'Megido'
 
 @app.route('/', methods=['GET'])
 def index():
-    uwyo_table, data_time = uwyo.data()
+    try:
+        uwyo_table, data_time = uwyo.data()
+    except uwyo.NoSoundingDataException:
+        flask.redirect('/no-data')
 
     locations = []
     for loc in stations.all():
@@ -70,6 +73,14 @@ def sounding(location_name):
     temp = ims.temp_max(station)
     data = calc.calculate(uwyo_table, temp, station['elevation'])
     return flask.send_file(plot.plot(data), mimetype='image/png')
+
+
+@app.route('/no-data', methods=['GET'])
+def no_data():
+    return flask.render_template(
+        'no_data.html',
+        hour=datetime.now().hour,
+    )
 
 
 @app.context_processor

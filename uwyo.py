@@ -13,9 +13,12 @@ from metpy.units import units
 import metpy.calc as mpcalc
 
 
+class NoSoundingDataException(Exception): pass
+
 CACHE = cache.CacheManager()
 _URL = 'http://weather.uwyo.edu/cgi-bin/sounding?region=mideast&TYPE=TEXT%3ALIST&YEAR={date.year}&MONTH={date.month}&FROM={date.day}{hour}&TO={date.day}{hour}&STNM=40179'
 _COL_NAMES = ['pressure', 'height', 'temperature', 'dewpoint', 'relh', 'mixr', 'direction', 'speed', 'thta', 'thte', 'thtv']
+_MIN_SOUNDING_LEN = 5
 
 
 def data():
@@ -34,7 +37,7 @@ def data():
     if data is not None:
         return data, '{} 00AM'.format(day_str)
 
-    raise exceptions.NotFound('No sounding data available from today')
+    raise NoSoundingDataException()
 
 
 @CACHE.cache('uwyo-data', expire=60*60)
@@ -64,6 +67,14 @@ def _uwyo_data_get(url):
     df = df.dropna(
         subset=('temperature', 'dewpoint', 'direction', 'speed'),
         how='all').reset_index(drop=True)
+
+    if any((
+        len(df['height']) < _MIN_SOUNDING_LEN,
+        len(df['temperature']) < _MIN_SOUNDING_LEN,
+        len(df['pressure']) < _MIN_SOUNDING_LEN,
+        len(df['dewpoint']) < _MIN_SOUNDING_LEN,
+    )):
+        return None
 
     d = Data(
         h=df['height'].values * units.meter,
