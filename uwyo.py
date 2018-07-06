@@ -20,18 +20,19 @@ _COL_NAMES = ['pressure', 'height', 'temperature', 'dewpoint', 'relh', 'mixr', '
 
 def data():
     now = datetime.now()
+    day_str = '{date.year}-{date.month}-{date.day}'.format(date=now)
 
     # first try noon measurements
     url = _URL.format(date=now, hour='12')
     data = _uwyo_data_get(url)
     if data is not None:
-        return data, '12PM'
+        return data, '{} 12PM'.format(day_str)
 
     # if no noon measurements available, return the midnight measurements
     url = _URL.format(date=now, hour='00')
     data = _uwyo_data_get(url)
     if data is not None:
-        return data, '00AM'
+        return data, '{} 00AM'.format(day_str)
 
     raise exceptions.NotFound('No sounding data available from today')
 
