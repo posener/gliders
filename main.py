@@ -27,17 +27,27 @@ def index():
         flask.redirect('/no-data')
 
     locations = []
+    max_tol = 0
+    max_tol_above_ground = 0
+
     for loc in stations.all():
         station = stations.get(loc)
-        locations.append({
+        loc = {
             'name': loc,
             'selected': False,
-            'data': calc.calculate(uwyo_table, ims.temp_max(station), station['elevation'])
-        })
-    max_tol = float(max(loc['data']['tol'] for loc in locations))
+            'data': calc.calculate(uwyo_table, ims.temp_max(station), station['elevation']),
+            'elevation': station['elevation'],
+        }
+        loc['data']['tol_above_ground'] = max(0, loc['data']['tol'] - loc['elevation'])
+
+        locations.append(loc)
+
+        max_tol = max(max_tol, float(loc['data']['tol']))
+        max_tol_above_ground = max(max_tol_above_ground, float(loc['data']['tol_above_ground']))
 
     for loc in locations:
         loc['tol_percent'] = loc['data']['tol'] / max_tol * 100
+        loc['tol_above_ground_percent'] = loc['data']['tol_above_ground'] / max_tol_above_ground * 100
 
     return flask.render_template(
         'index.html',
