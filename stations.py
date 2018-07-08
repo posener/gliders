@@ -14,7 +14,14 @@ _STATIONS = {
     if set(val.keys()) >= _KEYS
 }
 
-_ALL = sorted(_STATIONS.keys())
+_ALL = [
+    tup[0] for tup in
+    sorted(
+        _STATIONS.items(),
+        key=lambda tup: tup[1]['coord']['lat'],
+        reverse=True,
+    )
+]
 
 
 def get(name):
