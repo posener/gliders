@@ -5,9 +5,13 @@ Megido:
   temp_max_id: 209
 Beer Sheva:
   coord: {lat: 31.252973, long: 34.791462000000024}
-  elevation: 600
+  elevation: 656
   station_id: 59
   temp_max_id: 402
+Messada:
+  coord: {lat: 31.3167, long: 35.383}
+  elevation: -1233
+  temp_max_id: 105
 Haifa:
   coord: {lat: 32.799, long: 35.049}
   elevation: 400
@@ -15,18 +19,18 @@ Haifa:
   temp_max_id: 115
 Zefat:
   coord: {lat: 32.964648, long: 35.49599699999999}
-  elevation: 2568.9
+  elevation: 2800
   station_id: 62
   temp_station_id: 507
 Mizpe Ramon:
   coord: {lat: 30.610203, long: 34.801898}
-  elevation: 2775.59
+  elevation: 2320
   station_id:
   temp_station_id: 106
 Tiberias:
   coord: {lat: 32.795859, long: 35.53097300000002}
-  elevation: 334.646
-  temp_max_id: 114
+  elevation: -285
+  temp_max_id: 202
 Bet Shaan:
   coord: {lat: 32.497103, long: 35.49733600000002}
   elevation: 410.105
