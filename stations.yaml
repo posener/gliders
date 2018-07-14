@@ -21,11 +21,11 @@ Zefat:
   coord: {lat: 32.964648, long: 35.496}
   elevation: 3070
   station_id: 62
-  temp_station_id: 507
+  temp_max_id: 507
 Mizpe Ramon:
   coord: {lat: 30.610203, long: 34.801898}
   elevation: 2772
-  temp_station_id: 106
+  temp_max_id: 106
 Tiberias:
   coord: {lat: 32.795859, long: 35.531}
   elevation: -656
