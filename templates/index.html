@@ -12,19 +12,15 @@
                 <a href="/locations/{{loc.name}}" class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{loc.name}}</h5>
-                        <small><span class="badge badge-success">{% if loc.data.trig_0 >= loc.data.t0 %}Triggered{% endif %}</span></small>
+                        <small><span class="badge badge-danger">{% if loc.data.trig_0 >= loc.data.t0 %}Not Triggered{% endif %}</span></small>
                     </div>
                     <span class="badge badge-primary">TOL: {{'%.0f' | format(loc.data.tol)}} ft</span>
-                    <span class="badge badge-primary">TOL Relative: +{{'%.0f' | format(loc.data.tol_above_ground)}} ft</span>
                     <span class="badge badge-primary">TOL-3: {{'%.0f' | format(loc.data.tol_minus_3)}} ft</span>
                     <span class="badge badge-primary">Trigger: {{'%.0f' | format(loc.data.trig_0)}} C</span>
                     <span class="badge badge-primary">Max Temp: {{loc.data.t0}} C</span>
                     <span class="badge badge-primary">Ground: {{'%.0f' | format(loc.elevation)}} ft</span>
-                    <div class="progress" style="height: 20px; margin: 5px">
+                    <div class="progress" style="height: 20px">
                         <div class="progress-bar progress-bar-striped bg-{{ level(loc.tol_percent) }}" role="progressbar" style="width: {{loc.tol_percent}}%;" aria-valuenow="{{loc.tol_percent}}" aria-valuemin="0" aria-valuemax="100">TOL: {{'%.0f' | format(loc.data.tol)}} ft</div>
-                    </div>
-                    <div class="progress" style="height: 20px; margin: 5px">
-                        <div class="progress-bar progress-bar-striped bg-{{ level(loc.tol_above_ground_percent) }}" role="progressbar" style="width: {{loc.tol_above_ground_percent}}%;" aria-valuenow="{{loc.tol_above_ground_percent}}" aria-valuemin="0" aria-valuemax="100">TOL Relative: +{{'%.0f' | format(loc.data.tol_above_ground)}} ft</div>
                     </div>
                 </a>
                 {% endfor %}
