@@ -23,7 +23,7 @@ _MIN_SOUNDING_LEN = 5
 
 def data():
     now = datetime.now()
-    day_str = '{date.year}-{date.month}-{date.day}'.format(date=now)
+    day_str = '{date.day}/{date.month}/{date.year}'.format(date=now)
 
     # first try noon measurements
     url = _URL.format(date=now, hour='12')
