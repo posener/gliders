@@ -35,7 +35,7 @@ def _cached(data):
     return buf.read()
 
 
-def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, lim_h, lim_t, wind_u, wind_v):
+def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, cloud_base, lim_h, lim_t, wind_u, wind_v):
     fig = plt.figure(figsize=(6, 10))
     ax = fig.add_subplot(111)
     ax.grid(True)
@@ -61,10 +61,11 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, l
     # calculate trigger temperature
     ax.plot(trig, height, 'g--', label='Trigger {:.1f} C'.format(trig_0))
 
-    # calculate TOL and T-3
+    # plot TOL and T-3 and cloud base
     ax.plot([lim_t[-1] - 3], [tol], "ro", label='TOL {:.0f} ft'.format(tol), marker=r'^', markersize=16)
-
     ax.plot([lim_t[-1] - 3], [tol_minus_3], 'yo', label='T-3 {:.0f} ft'.format(tol_minus_3), marker=r'^', markersize=16)
+    if cloud_base is not None:
+        ax.plot([lim_t[-1] - 3], [cloud_base], 'bo', label='Cloud Base {:.0f} ft'.format(cloud_base), marker=r'^', markersize=16)
 
     xloc = 0.1
     x_clip_radius = 0.08

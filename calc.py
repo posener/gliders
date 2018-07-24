@@ -9,6 +9,7 @@ _LIM_H = 0, 15000
 
 
 M = -3. / 1000
+M_DEW = -1.5 / 1000
 H_TRIGGER = 4000.
 
 
@@ -17,9 +18,24 @@ def calculate(data, t0, h0):
     temp = np.array([ti.to('degC').m for ti in data.T[:len(height)]])
     dew = np.array([ti.to('degC').m for ti in data.Td[:len(height)]])
 
+    # calculate the max temperature graph
+    # this graph starts at (t0, h0) and follows the slope M
     temp_max = [t0 + M * (hi - h0) for hi in height]
 
+    # calculate the dew point in h0
+    dew_h0 = np.interp(h0, height, dew)
+    # calculate the dew graph - starts from (dew_h0, h0) and follows the slope of M_DEW
+    dew_const = [dew_h0 + M_DEW * (hi - h0) for hi in height]
+
+    # the cloud base is where the temp_max crosses the dew_const graph
+    cloud_base = np.interp(0, np.flip(np.array(temp_max) - np.array(dew_const), 0), np.flip(height, 0))
+    if cloud_base == height[-1]:
+        cloud_base = None
+
+    # calculate trigger temperature
+    # trig_h is the temperature at height H_TRIGGER
     trig_h = np.interp(H_TRIGGER, height, temp)
+    # trig is the trigger graph
     trig = trig_h + M * (height - H_TRIGGER)
     trig_0 = trig_h + M * (h0 - H_TRIGGER)
 
@@ -36,6 +52,7 @@ def calculate(data, t0, h0):
         'dew': dew,
         'temp_max': temp_max,
         'trig': trig,
+        'cloud_base': cloud_base,
         'h0': h0,
         't0': t0,
         'trig_0': trig_0,
