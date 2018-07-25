@@ -64,8 +64,7 @@ def _plot(height, temp, dew, temp_max, trig, h0, t0, trig_0, tol, tol_minus_3, c
     # plot TOL and T-3 and cloud base
     ax.plot([lim_t[-1] - 3], [tol], "ro", label='TOL {:.0f} ft'.format(tol), marker=r'^', markersize=16)
     ax.plot([lim_t[-1] - 3], [tol_minus_3], 'yo', label='T-3 {:.0f} ft'.format(tol_minus_3), marker=r'^', markersize=16)
-    if cloud_base is not None:
-        ax.plot([lim_t[-1] - 3], [cloud_base], 'bo', label='Cloud Base {:.0f} ft'.format(cloud_base), marker=r'^', markersize=16)
+    ax.plot([lim_t[-1] - 3], [cloud_base], 'bo', label='Cloud Base {:.0f} ft'.format(cloud_base), marker=r'^', markersize=16)
 
     xloc = 0.1
     x_clip_radius = 0.08
