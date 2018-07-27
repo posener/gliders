@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Sounding: {{location}} {{data_time}} {% endblock %}
+{% block title2 %} Sounding: {{location}} {{data_time}} {% endblock %}
+
+{% block content %}
+
+     <div class="row">
+         <div class="col-12">
+             <img src="/sounding/{{location}}/{{data_time}}.png" class="img-fluid mx-auto d-block" alt="Not Found">
+         </div>
+     </div>
+
+{% endblock %}

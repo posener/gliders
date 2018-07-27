@@ -27,7 +27,7 @@ def plot(data):
 
 @CACHE.cache('plot', expire=60)
 def _cached(data):
-    logging.info('Drawing plot for %s', data)
+    logging.info('Drawing plot')
     plt = _plot(**data)
     buf = io.BytesIO()
     plt.savefig(buf, format='png')

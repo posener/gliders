@@ -15,27 +15,29 @@ import metpy.calc as mpcalc
 
 class NoSoundingDataException(Exception): pass
 
+
 CACHE = cache.CacheManager()
-_URL = 'http://weather.uwyo.edu/cgi-bin/sounding?region=mideast&TYPE=TEXT%3ALIST&YEAR={date.year}&MONTH={date.month}&FROM={date.day}{hour}&TO={date.day}{hour}&STNM=40179'
+_URL = 'http://weather.uwyo.edu/cgi-bin/sounding?region=mideast&TYPE=TEXT%3ALIST&YEAR={date.year}&MONTH={date.month}&FROM={date.day:02d}{date.hour:02d}&TO={date.day:02d}{date.hour:02d}&STNM=40179'
 _COL_NAMES = ['pressure', 'height', 'temperature', 'dewpoint', 'relh', 'mixr', 'direction', 'speed', 'thta', 'thte', 'thtv']
 _MIN_SOUNDING_LEN = 5
 
 
 def data():
-    now = datetime.now()
-    day_str = '{date.day}/{date.month}/{date.year}'.format(date=now)
+    date = datetime.now()
+    date = date.replace(hour=12)
 
     # first try noon measurements
-    url = _URL.format(date=now, hour='12')
+    url = _URL.format(date=date)
     data = _uwyo_data_get(url)
     if data is not None:
-        return data, '{} 12PM'.format(day_str)
+        return data, date
 
     # if no noon measurements available, return the midnight measurements
-    url = _URL.format(date=now, hour='00')
+    date = date.replace(hour=0)
+    url = _URL.format(date=date)
     data = _uwyo_data_get(url)
     if data is not None:
-        return data, '{} 00AM'.format(day_str)
+        return data, date
 
     raise NoSoundingDataException()
 

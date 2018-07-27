@@ -1,14 +1,19 @@
 import logging
 import sys
 from datetime import datetime
+from datetime import timedelta
 
 import flask
+from werkzeug import exceptions
+from beaker import cache
 
 import ims
 import uwyo
+import noaa
 import calc
 import plot
 import stations
+import timeformat
 
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
@@ -17,6 +22,13 @@ app = flask.Flask(__name__)
 
 
 DEFAULT_LOCATION = 'Megido'
+# NOAA forecast data is for 5 days
+# IMS forecast data is for 3 days
+# We choose the minimum
+FORECAST_HOURS = 3 * 24
+FORECAST_RES_HOURS = 6
+
+CACHE = cache.CacheManager()
 
 
 @app.route('/', methods=['GET'])
@@ -24,7 +36,7 @@ def index():
     try:
         uwyo_table, data_time = uwyo.data()
     except uwyo.NoSoundingDataException:
-        flask.redirect('/no-data')
+        return flask.redirect('/no-data')
 
     locations = []
     max_tol = 0
@@ -50,24 +62,39 @@ def index():
         location=None,
         hour=datetime.now().hour,
         locations=locations,
-        data_time=data_time,
+        data_time=timeformat.format(data_time),
     )
 
 
 @app.route('/locations/<location_name>', methods=['GET'])
 def site(location_name):
     _, data_time = uwyo.data()
-    locations = [
-        {'name': loc, 'selected': loc == location_name}
-        for loc in stations.all()
-    ]
 
     return flask.render_template(
         'location.html',
         location=location_name,
         hour=datetime.now().hour,
-        locations=locations,
+        locations=locations(location_name),
         data_time=data_time,
+        forecast_dates=forecast_dates(),
+    )
+
+
+@app.route('/locations/<location_name>/<date>', methods=['GET'])
+def forecast(location_name, date):
+    try:
+        date = timeformat.parse(date)
+    except timeformat.InvalidDateFormatException:
+        return flask.redirect('/?error=invalid-date-format')
+
+    data_time = noaa.data_time(date)
+
+    return flask.render_template(
+        'forecast.html',
+        location=location_name,
+        locations=locations(location_name),
+        data_time=timeformat.format(data_time),
+        forecast_dates=forecast_dates(),
     )
 
 
@@ -77,6 +104,26 @@ def sounding(location_name):
     station = stations.get(location_name)
     uwyo_table, time = uwyo.data()
     temp = ims.temp_max(station)
+    data = calc.calculate(uwyo_table, temp, station['elevation'])
+    return flask.send_file(plot.plot(data), mimetype='image/png')
+
+
+@app.route('/sounding/<location_name>/<date>.png', methods=['GET'])
+def sounding_forecast(location_name, date):
+    try:
+        date = timeformat.parse(date)
+    except timeformat.InvalidDateFormatException:
+        return exceptions.BadRequest('Invalid date format')
+
+    location_name = location_name.split('-')[0]
+    station = stations.get(location_name)
+    uwyo_table, time = noaa.data(date)
+
+    try:
+        temp = ims.temp_forecast(station, date)
+    except ims.NoForecastForDateException:
+        return flask.redirect('/static/confused.png')
+
     data = calc.calculate(uwyo_table, temp, station['elevation'])
     return flask.send_file(plot.plot(data), mimetype='image/png')
 
@@ -102,49 +149,19 @@ def level():
     return {'level': level}
 
 
-SOUNDING_URL = 'https://rucsoundings.noaa.gov/gwt/soundings/get_soundings.cgi?airport={lat}%2C{long}&start=latest&n_hrs=1&data_source=GFS&fcst_len=shortest&hr_inc=1&protocol=https%3A'
+def locations(location_name):
+    return [
+        {'name': loc, 'selected': loc == location_name}
+        for loc in stations.all()
+    ]
 
-lat = 32.577899
-long = 35.179972
 
-
-# @app.route('/sounding_h_p.png', methods=['GET'])
-# def sounding_p_t():
-#     lat = flask.request.args.get('lat')
-#     long = flask.request.args.get('long')
-#
-#     if lat is None or long is None:
-#         raise exceptions.BadRequest('Must provide lat and long')
-#
-#     data = _get_data(lat, long)
-#     plt = draw.plot_p_t(data)
-#     return flask.send_file(plt, mimetype='image/png')
-#
-#
-# @app.route('/sounding_h_t.png', methods=['GET'])
-# def sounding_h_t():
-#     lat = flask.request.args.get('lat')
-#     long = flask.request.args.get('long')
-#
-#     if lat is None or long is None:
-#         raise exceptions.BadRequest('Must provide lat and long')
-#
-#     data = _get_data(lat, long)
-#     plt = draw.plot_h_t(data)
-#     return flask.send_file(plt, mimetype='image/png')
-#
-#
-# def _get_data(lat, long):
-#     resp = requests.get(SOUNDING_URL.format(lat=lat, long=long))
-#     if resp.status_code != 200:
-#         raise exceptions.InternalServerError('Bad response from sounding server')
-#
-#     if len(resp.content) == 0:
-#         raise exceptions.InternalServerError('Did not receive sounding data')
-#
-#     with open('/tmp/sounding.txt', 'w') as f:
-#         f.write(resp.content)
-#
-#     return '/tmp/sounding.txt'
-#
-#
+@CACHE.cache('forecast-dates', expire=3*60*60)
+def forecast_dates():
+    now = datetime.now()
+    first_forecast_hour = now.hour-(now.hour % FORECAST_RES_HOURS) + FORECAST_RES_HOURS
+    now = now.replace(hour=first_forecast_hour, minute=0, second=0, microsecond=0)
+    return [
+        timeformat.format(now + timedelta(hours=FORECAST_RES_HOURS*i))
+        for i in range(FORECAST_HOURS / FORECAST_RES_HOURS)
+    ]

@@ -29,7 +29,19 @@
         <ul class="nav navbar-nav">
             <li> <a class="navbar-brand" href="#">{% block title2 %}{% endblock %}</a> </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar">
+            {% if location %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Forecast
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for date in forecast_dates %}
+                    <a class="dropdown-item" href="/locations/{{location}}/{{date}}">{{date}}</a>
+                    {% endfor %}
+                </div>
+            </li>
+            {% endif %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 GoTo
