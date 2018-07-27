@@ -36,8 +36,9 @@
                     Forecast
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/locations/{{location}}">Measured</a>
                     {% for date in forecast_dates %}
-                    <a class="dropdown-item" href="/locations/{{location}}/{{date}}">{{date}}</a>
+                    <a class="dropdown-item" href="/locations/{{location}}/{{date}}">Simulated {{date}}</a>
                     {% endfor %}
                 </div>
             </li>

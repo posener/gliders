@@ -22,11 +22,6 @@ app = flask.Flask(__name__)
 
 
 DEFAULT_LOCATION = 'Megido'
-# NOAA forecast data is for 5 days
-# IMS forecast data is for 3 days
-# We choose the minimum
-FORECAST_HOURS = 3 * 24
-FORECAST_RES_HOURS = 6
 
 CACHE = cache.CacheManager()
 
@@ -75,7 +70,7 @@ def site(location_name):
         location=location_name,
         hour=datetime.now().hour,
         locations=locations(location_name),
-        data_time=data_time,
+        data_time=timeformat.format(data_time),
         forecast_dates=forecast_dates(),
     )
 
@@ -83,7 +78,7 @@ def site(location_name):
 @app.route('/locations/<location_name>/<date>', methods=['GET'])
 def forecast(location_name, date):
     try:
-        date = timeformat.parse(date)
+        date = timeformat.parse_month(date)
     except timeformat.InvalidDateFormatException:
         return flask.redirect('/?error=invalid-date-format')
 
@@ -111,7 +106,7 @@ def sounding(location_name):
 @app.route('/sounding/<location_name>/<date>.png', methods=['GET'])
 def sounding_forecast(location_name, date):
     try:
-        date = timeformat.parse(date)
+        date = timeformat.parse_month(date)
     except timeformat.InvalidDateFormatException:
         return exceptions.BadRequest('Invalid date format')
 
@@ -159,9 +154,8 @@ def locations(location_name):
 @CACHE.cache('forecast-dates', expire=3*60*60)
 def forecast_dates():
     now = datetime.now()
-    first_forecast_hour = now.hour-(now.hour % FORECAST_RES_HOURS) + FORECAST_RES_HOURS
-    now = now.replace(hour=first_forecast_hour, minute=0, second=0, microsecond=0)
+    now = now.replace(hour=12, minute=0, second=0, microsecond=0)
     return [
-        timeformat.format(now + timedelta(hours=FORECAST_RES_HOURS*i))
-        for i in range(FORECAST_HOURS / FORECAST_RES_HOURS)
+        timeformat.format_month(now + timedelta(days=i))
+        for i in range(3)
     ]
