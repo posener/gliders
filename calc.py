@@ -25,7 +25,7 @@ def calculate(data, t0, h0):
     dew_h0 = np.interp(h0, height, dew)
 
     # calculate the cloud base
-    cloud_base = 1000.0 / 1.5 * (t0 - dew_h0) + h0
+    cloud_base = 1000.0 / 2.5 * (t0 - dew_h0) + h0
 
     # calculate trigger temperature
     # trig_h is the temperature at height H_TRIGGER
