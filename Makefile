@@ -1,5 +1,5 @@
 run:
-	FLASK_APP=main.py ./venv/bin/flask run --host 0.0.0.0 --port 80
+	gunicorn main:app
 
 run-autoreload:
 	FLASK_APP=main.py ./venv/bin/flask run --host 0.0.0.0 --port 80 --reload
