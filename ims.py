@@ -31,11 +31,13 @@ def temp_forecast(station, date):
     if _same_day(datetime.now(), date):
         return _temp_max(station_id)
 
+    found_dates = []
     for forecast_date, temp in _temp_forecast(station_id):
+        found_dates.append(forecast_date)
         if _same_day(date, forecast_date):
             return temp
 
-    logging.warning('No ims data for station %s date %s', station_id, date)
+    logging.warning('No ims data for station %s date %s. available: %s', station_id, date, found_dates)
     raise NoForecastForDateException()
 
 
