@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 import requests
 from werkzeug import exceptions
-from StringIO import StringIO
+from io import StringIO
 import pandas as pd
 import bs4
 from metpy.units import units

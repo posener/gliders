@@ -8,7 +8,7 @@ from datetime import datetime
 from datetime import timedelta
 import requests
 from werkzeug import exceptions
-from StringIO import StringIO
+from io import StringIO
 import pandas as pd
 from metpy.units import units
 import metpy.calc as mpcalc
@@ -66,7 +66,7 @@ def _uwyo_data_get(url):
         logging.error('Got unexpected status from "noaa: %d: %s', resp.status_code, resp.content)
         raise exceptions.InternalServerError('Failed to get sounding data from "http://weather.uwyo.edu"')
 
-    table = resp.content
+    table = resp.text
 
     df = pd.read_fwf(StringIO(table), skiprows=6, usecols=[1, 2, 3, 4, 5, 6], names=_COL_NAMES)
 
