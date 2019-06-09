@@ -16,8 +16,6 @@ import stations
 import timeformat
 
 
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-
 app = flask.Flask(__name__)
 
 
