@@ -14,7 +14,7 @@ CACHE = cache.CacheManager()
 FILE_NAME = '/tmp/sounding-{date.year}-{date.month}-{date.day}-{hour}.png'
 
 
-matplotlib.rc('font', family='normal', size=16)
+matplotlib.rc('font', size=16)
 
 
 def plot(data):

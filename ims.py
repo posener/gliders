@@ -54,7 +54,12 @@ def _temp_max(station_id):
     )
     resp.raise_for_status()
     page = bs4.BeautifulSoup(resp.content, 'html.parser')
-    txt = page.find(id='MaxTempDuringDayVal').text
+    element = page.find(id='MaxTempDuringDayVal')
+    txt = '0'
+    if element is not None:
+        txt = element.text
+    else:
+        logging.warning('IMS page does not contain "MaxTempDuringDayVal". page content: %s', page)
     return int(_DIGITS.match(txt).group())
 
 
