@@ -18,6 +18,8 @@ import timeformat
 
 app = flask.Flask(__name__)
 
+logging.basicConfig()
+
 
 DEFAULT_LOCATION = 'Megido'
 
