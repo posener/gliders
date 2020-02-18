@@ -22,6 +22,7 @@ logging.basicConfig()
 
 
 DEFAULT_LOCATION = 'Megido'
+FORCAST_DAYS = 4
 
 CACHE = cache.CacheManager()
 
@@ -157,5 +158,5 @@ def forecast_dates():
     now = now.replace(hour=12, minute=0, second=0, microsecond=0)
     return [
         timeformat.format_month(now + timedelta(days=i))
-        for i in range(3)
+        for i in range(FORCAST_DAYS)
     ]

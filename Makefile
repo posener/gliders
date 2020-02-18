@@ -1,8 +1,5 @@
 run:
-	gunicorn main:app
+	sudo gunicorn main:app --bind 0.0.0.0:80
 
-run-autoreload:
-	FLASK_APP=main.py ./venv/bin/flask run --host 0.0.0.0 --port 80 --reload
-
-debug:
-	FLASK_DEBUG=1 FLASK_APP=main.py ./venv/bin/flask run
+run-background:
+	sudo gunicorn main:app --bind 0.0.0.0:80 2>log.txt &
